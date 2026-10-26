@@ -1,21 +1,30 @@
 
+import json
+import urllib.error
+import urllib.request
+
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
 from backend.config import settings
 from backend.schemas import HealthResponse, ChatRequest, ChatResponse
 
+
+OLLAMA_URL = "http://127.0.0.1:11434/api/chat"
+MODEL_NAME = "llama3.2:3b"
+
+
 app = FastAPI(
     title=settings.app_name,
-    description="Minimal FastAPI backend for Nova 360 AI",
-    version="0.2.0",
+    description="Nova 360 AI powered by local Ollama and Llama",
+    version="0.3.0",
 )
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.cors_origins,
     allow_credentials=True,
-    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allow_methods=["*"],
     allow_headers=["*"],
 )
 
@@ -39,38 +48,76 @@ def chat(request: ChatRequest):
             detail="Message cannot be empty.",
         )
 
-    text = message.lower()
+    payload = {
+        "model": MODEL_NAME,
+        "messages": [
+            {
+                "role": "system",
+                "content": (
+                    "You are Nova 360 AI, a helpful and accurate AI assistant. "
+                    "Answer clearly and practically. For coding questions, "
+                    "explain solutions step by step. Do not claim to have "
+                    "performed actions you have not performed."
+                ),
+            },
+            {
+                "role": "user",
+                "content": message,
+            },
+        ],
+        "stream": False,
+    }
 
-    if any(word in text for word in ["hello", "hi", "hey", "namaste"]):
-        reply = "Hello! Welcome to Nova 360 AI. How can I help you today?"
-    elif any(word in text for word in ["python", "code", "programming"]):
-        reply = (
-            "Let's solve your coding problem step by step. "
-            "Tell me what you want to build or share your code."
-        )
-    elif any(word in text for word in ["career", "job", "hackathon", "project"]):
-        reply = (
-            "Let's plan your next step! Define your goal, choose a small "
-            "MVP, build the main feature, and test it with a real example."
-        )
-    elif any(word in text for word in ["health", "wellbeing", "doctor", "medicine", "medication", "allergy", "symptom", "appointment", "clinic", "hospital", "wellness"]):
-        reply = (
-            "**Nova Health & Wellbeing AI Guidance**\n\n"
-            f"Regarding your question: *{message}*\n\n"
-            "Here is structured information to help you manage your health inquiry:\n\n"
-            "- **Observation**: Document the timeline, patterns, and severity of what you are experiencing.\n"
-            "- **Organization**: Ensure your current medication list, allergy history, and recent lab results are organized before your appointment.\n"
-            "- **Questions to Ask**: Note down 2-3 specific questions for your healthcare professional regarding diagnosis, management options, or preventive steps.\n\n"
-            "*Notice: This guidance is informational only and does not replace professional medical diagnosis, treatment, or emergency care.*"
-        )
-    else:
-        reply = (
-            f"Nova 360 AI received your message: {message}\n\n"
-            "This is a test backend response, not a real AI-generated answer. "
-            "We can integrate a free local AI model in the next step."
-        )
+    http_request = urllib.request.Request(
+        OLLAMA_URL,
+        data=json.dumps(payload).encode("utf-8"),
+        headers={"Content-Type": "application/json"},
+        method="POST",
+    )
 
-    return ChatResponse(reply=reply)
+    try:
+        with urllib.request.urlopen(
+            http_request, timeout=180
+        ) as response:
+            result = json.loads(response.read().decode("utf-8"))
+
+        reply = result.get("message", {}).get("content", "").strip()
+
+        if not reply:
+            raise HTTPException(
+                status_code=502,
+                detail="Ollama returned an empty response.",
+            )
+
+        return ChatResponse(reply=reply)
+
+    except urllib.error.HTTPError as exc:
+        details = exc.read().decode("utf-8", errors="replace")
+        raise HTTPException(
+            status_code=502,
+            detail=f"Ollama API error: {details}",
+        ) from exc
+
+    except urllib.error.URLError as exc:
+        raise HTTPException(
+            status_code=503,
+            detail=(
+                "Cannot connect to Ollama. Make sure Ollama is running "
+                "and llama3.2:3b is installed."
+            ),
+        ) from exc
+
+    except TimeoutError as exc:
+        raise HTTPException(
+            status_code=504,
+            detail="The AI response timed out. Please try again.",
+        ) from exc
+
+    except json.JSONDecodeError as exc:
+        raise HTTPException(
+            status_code=502,
+            detail="Ollama returned an invalid JSON response.",
+        ) from exc
 
 
 if __name__ == "__main__":
