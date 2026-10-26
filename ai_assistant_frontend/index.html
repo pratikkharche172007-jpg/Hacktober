@@ -1,0 +1,288 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#f7f9ff" />
+  <title>Nova 360 AI — Your workspace</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="health-module.css" />
+</head>
+<body>
+  <div class="app-shell">
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">
+          <span>✦</span><b>n</b>
+        </div>
+        <div class="brand-name">Nova 360 <span>AI</span></div>
+        <button class="icon-button close-sidebar" id="closeSidebar"
+          aria-label="Close sidebar">×</button>
+      </div>
+
+      <button class="new-chat" id="newChat">
+        <span class="plus">＋</span> New chat <kbd>Ctrl K</kbd>
+      </button>
+
+      <button class="side-link" id="searchToggle">
+        <span class="side-icon">⌕</span> Search chats
+      </button>
+
+      <button class="side-link" id="libraryBtn">
+        <span class="side-icon">▤</span> Library
+      </button>
+
+      <!-- Eight AI modules -->
+      <div class="side-section">
+        <div class="section-heading">AI FEATURES</div>
+
+        <button class="side-link module-link" data-prompt="Help me create a personalized learning plan.">
+          <span class="module-icon violet">🎓</span> Learning
+        </button>
+
+        <button class="side-link module-link" data-prompt="Help me with work, business planning and productivity.">
+          <span class="module-icon blue">💼</span> Work &amp; Business
+        </button>
+
+        <button class="side-link module-link" data-prompt="Help me create a budget and organize expenses.">
+          <span class="module-icon orange">💰</span> Money Management
+        </button>
+
+        <button class="side-link module-link" id="healthSidebarBtn" data-module="health" data-prompt="Give me general health and wellbeing guidance.">
+          <span class="module-icon pink">💗</span> Health &amp; Wellbeing
+        </button>
+
+        <button class="side-link module-link" data-prompt="Help me check a suspicious message for scam warning signs.">
+          <span class="module-icon cyan">🛡️</span> Safety &amp; Scam Detection
+        </button>
+
+        <button class="side-link module-link" data-prompt="Help me organize family routines and daily tasks.">
+          <span class="module-icon violet">⌂</span> Family &amp; Daily Life
+        </button>
+
+        <button class="side-link module-link" data-prompt="Help me understand government services and schemes.">
+          <span class="module-icon blue">🏛️</span> Public Services
+        </button>
+
+        <button class="side-link module-link" data-prompt="Help me find and compare local services.">
+          <span class="module-icon green">📍</span> Local Services
+        </button>
+      </div>
+
+      <!-- Keep chat history for existing JavaScript -->
+      <div class="side-section recent-section">
+        <div class="section-heading">
+          RECENT CHATS
+          <button id="clearChats" title="Clear recent chats">···</button>
+        </div>
+
+        <div id="chatList" class="chat-list">
+          <button class="chat-item active" data-chat="Meeting summary">
+            <span>◷</span><span class="chat-title">Meeting summary</span>
+          </button>
+          <button class="chat-item" data-chat="Team report">
+            <span>◷</span><span class="chat-title">Team report</span>
+          </button>
+          <button class="chat-item" data-chat="Email drafting">
+            <span>◷</span><span class="chat-title">Email drafting</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="sidebar-bottom">
+        <div class="upgrade-card">
+          <div class="upgrade-icon">✦</div>
+          <div>
+            <strong>Make more with Nova 360 AI</strong>
+            <p>Your ideas, one conversation away.</p>
+          </div>
+          <span class="tiny-arrow">›</span>
+        </div>
+
+        <button class="profile side-link" id="profileBtn">
+          <span class="avatar">P</span>
+          <span class="profile-copy">
+            <strong>Personal workspace</strong>
+            <small>Nova 360 AI</small>
+          </span>
+          <span class="profile-dots">···</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main content -->
+    <main class="main-panel">
+      <header class="topbar">
+        <button class="icon-button menu-button" id="openSidebar"
+          aria-label="Open sidebar">☰</button>
+
+        <div class="breadcrumb">
+          <span>Workspace</span>
+          <span class="crumb-slash">/</span>
+          <strong id="pageTitle">New chat</strong>
+        </div>
+
+        <div class="top-actions">
+          <span class="status-dot"></span>
+          <span class="online-label">AI workspace</span>
+          <button class="icon-button" id="themeToggle"
+            title="Toggle theme" aria-label="Toggle theme">◐</button>
+        </div>
+      </header>
+
+      <section class="workspace" id="workspace">
+
+        <!-- Dashboard welcome -->
+        <div class="welcome" id="welcome">
+          <div class="hero-logo"><span>✦</span><b>n</b></div>
+
+          <div class="eyebrow">
+            <span class="eyebrow-line"></span>
+            YOUR PERSONAL AI PARTNER
+            <span class="eyebrow-line"></span>
+          </div>
+
+          <h1>
+            Welcome to <span>Nova 360 AI.</span><br />
+            What can I help you <em>with today?</em>
+          </h1>
+
+          <p class="hero-subtitle">
+            Learn, plan, stay informed and make everyday tasks easier.
+          </p>
+
+          <!-- Eight dashboard cards -->
+          <div class="suggestion-grid">
+
+            <button class="suggestion-card" data-prompt="Help me create a personalized learning plan.">
+              <span class="suggestion-icon violet">🎓</span>
+              <span>
+                <strong>Learning</strong>
+                <small>Study help, language learning and skill development.</small>
+              </span>
+              <span class="card-arrow">→</span>
+            </button>
+
+            <button class="suggestion-card" data-prompt="Help me with work, business planning and productivity.">
+              <span class="suggestion-icon blue">💼</span>
+              <span>
+                <strong>Work &amp; Business</strong>
+                <small>Writing, planning, business tasks and productivity.</small>
+              </span>
+              <span class="card-arrow">→</span>
+            </button>
+
+            <button class="suggestion-card" data-prompt="Help me create a budget and organize expenses.">
+              <span class="suggestion-icon orange">💰</span>
+              <span>
+                <strong>Money Management</strong>
+                <small>Budgets, expenses and financial literacy.</small>
+              </span>
+              <span class="card-arrow">→</span>
+            </button>
+
+            <button class="suggestion-card" id="healthCardBtn" data-module="health" data-prompt="Give me general health and wellbeing guidance.">
+              <span class="suggestion-icon green">💗</span>
+              <span>
+                <strong>Health &amp; Wellbeing</strong>
+                <small>Wellness routines, reminders and general wellbeing.</small>
+              </span>
+              <span class="card-arrow">→</span>
+            </button>
+
+            <button class="suggestion-card" data-prompt="Help me check a suspicious message for scam warning signs.">
+              <span class="suggestion-icon blue">🛡️</span>
+              <span>
+                <strong>Safety &amp; Scam Detection</strong>
+                <small>Suspicious messages, scam signs and online safety.</small>
+              </span>
+              <span class="card-arrow">→</span>
+            </button>
+
+            <button class="suggestion-card" data-prompt="Help me organize family routines and daily tasks.">
+              <span class="suggestion-icon violet">⌂</span>
+              <span>
+                <strong>Family &amp; Daily Life</strong>
+                <small>Household planning, reminders and daily routines.</small>
+              </span>
+              <span class="card-arrow">→</span>
+            </button>
+
+            <button class="suggestion-card" data-prompt="Help me understand government services and schemes.">
+              <span class="suggestion-icon blue">🏛️</span>
+              <span>
+                <strong>Public Services</strong>
+                <small>Government schemes, documents and service guidance.</small>
+              </span>
+              <span class="card-arrow">→</span>
+            </button>
+
+            <button class="suggestion-card" data-prompt="Help me find and compare local services.">
+              <span class="suggestion-icon green">📍</span>
+              <span>
+                <strong>Local Services</strong>
+                <small>Local service information and comparison guidance.</small>
+              </span>
+              <span class="card-arrow">→</span>
+            </button>
+
+          </div>
+        </div>
+
+        <!-- Keep existing chat container -->
+        <div class="conversation hidden" id="conversation"
+          aria-live="polite"></div>
+
+        <!-- Dedicated Health & Wellbeing Module Workspace -->
+        <div class="health-workspace hidden" id="healthWorkspace" aria-live="polite"></div>
+
+        <!-- Chat composer -->
+        <div class="composer-wrap">
+          <form class="composer" id="chatForm">
+            <textarea id="messageInput" rows="1"
+              placeholder="Message Nova 360 AI..."
+              aria-label="Write a message"></textarea>
+
+            <div class="composer-toolbar">
+              <div class="composer-left">
+                <label class="attach-button" title="Attach a file">
+                  ＋ <span>Attach</span>
+                  <input type="file" id="fileInput" hidden />
+                </label>
+                <span id="fileName" class="file-name"></span>
+              </div>
+
+              <div class="composer-right">
+                <span class="composer-hint">
+                  Enter to send · Shift + Enter for new line
+                </span>
+                <button type="button" class="voice-button" id="voiceButton"
+                  title="Voice input" aria-label="Voice input">♩</button>
+                <button type="submit" class="send-button" id="sendButton"
+                  aria-label="Send message">↑</button>
+              </div>
+            </div>
+          </form>
+
+          <p class="disclaimer">
+            Nova 360 AI · Responses depend on the connected backend.
+            Health guidance is informational and is not a medical diagnosis.
+          </p>
+        </div>
+
+      </section>
+    </main>
+  </div>
+
+  <div class="toast" id="toast" role="status"></div>
+
+  <!-- Reputable Markdown parser and sanitizer -->
+  <script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.6/dist/purify.min.js"></script>
+  <script src="script.js"></script>
+  <script src="health-module.js"></script>
+</body>
+</html>
